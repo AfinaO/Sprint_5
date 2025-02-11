@@ -1,29 +1,18 @@
-from selenium import webdriver
+import pytest
 from selenium.webdriver.common.by import By
-import time
+
 from locators import AuthorizationLocators
+from constants import Links
+from constants import Data
 
-def test_logout():
-    driver = webdriver.Chrome()
-    driver.implicitly_wait(10)
-    try:
-        driver.get("https://stellarburgers.nomoreparties.site/")
+@pytest.mark.parametrize('run_driver', [Links.main_link], indirect=True)
+def test_logout(driver, run_driver):
+    driver.find_element(By.XPATH, AuthorizationLocators.PERSONAL_ACCOUNT_BUTTON).click()
 
-        driver.find_element(By.XPATH, AuthorizationLocators.PERSONAL_ACCOUNT_BUTTON).click()
+    driver.find_element(By.XPATH, AuthorizationLocators.EMAIL_FIELD).send_keys(Data.email)
+    driver.find_element(By.XPATH, AuthorizationLocators.PASSWORD_FIELD).send_keys(Data.password)
+    driver.find_element(By.XPATH, AuthorizationLocators.ENTER_BUTTON).click()
 
-        time.sleep(2)
+    driver.find_element(By.XPATH, AuthorizationLocators.PERSONAL_ACCOUNT_BUTTON).click()
 
-        driver.find_element(By.XPATH, AuthorizationLocators.EMAIL_FIELD).send_keys("olgaprihodko18999@yandex.ru")
-        driver.find_element(By.XPATH, AuthorizationLocators.PASSWORD_FIELD).send_keys("123456")
-        driver.find_element(By.XPATH, AuthorizationLocators.ENTER_BUTTON).click()
-
-        driver.find_element(By.XPATH, AuthorizationLocators.PERSONAL_ACCOUNT_BUTTON).click()
-
-        time.sleep(2)
-
-        driver.find_element(By.XPATH, AuthorizationLocators.LOGOUT_BUTTON).click()
-
-        time.sleep(2)
-
-    finally:
-        driver.quit()
+    driver.find_element(By.XPATH, AuthorizationLocators.LOGOUT_BUTTON).click()

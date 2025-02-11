@@ -1,51 +1,19 @@
-from selenium import webdriver
+import pytest
 from selenium.webdriver.common.by import By
-import time
-#from locators import AuthorizationLocators
 from locators import NavigationLocators
+from constants import Links
 
-def test_go_to_bulki():
-    driver = webdriver.Chrome()
-    driver.implicitly_wait(10)
-    try:
-        driver.get("https://stellarburgers.nomoreparties.site/")
-
-        driver.find_element(By.XPATH, NavigationLocators.FILLINGS_BUTTON).click()
-
-        time.sleep(2)
-
-        driver.find_element(By.XPATH, NavigationLocators.BULKI_BUTTON).click()
-
-        time.sleep(2)
-
-    finally:
-        driver.quit()
-
-def test_go_to_sauses():
-    driver = webdriver.Chrome()
-    driver.implicitly_wait(10)
-
-    try:
-        driver.get("https://stellarburgers.nomoreparties.site/")
-
-        driver.find_element(By.XPATH, NavigationLocators.SAUSES_BUTTON).click()
-
-        time.sleep(2)
-
-    finally:
-        driver.quit()
+@pytest.mark.parametrize('run_driver', [Links.main_link], indirect=True)
+def test_go_to_bulki(driver, run_driver):
+    driver.find_element(By.XPATH, NavigationLocators.FILLINGS_BUTTON).click()
+    driver.find_element(By.XPATH, NavigationLocators.BULKI_BUTTON).click()
 
 
-def test_go_to_fillings():
-    driver = webdriver.Chrome()
-    driver.implicitly_wait(10)
+@pytest.mark.parametrize('run_driver', [Links.main_link], indirect=True)
+def test_go_to_sauses(driver, run_driver):
+    driver.find_element(By.XPATH, NavigationLocators.SAUSES_BUTTON).click()
 
-    try:
-        driver.get("https://stellarburgers.nomoreparties.site/")
 
-        driver.find_element(By.XPATH, NavigationLocators.FILLINGS_BUTTON).click()
-
-        time.sleep(2)
-
-    finally:
-        driver.quit()
+@pytest.mark.parametrize('run_driver', [Links.main_link], indirect=True)
+def test_go_to_fillings(driver, run_driver):
+    driver.find_element(By.XPATH, NavigationLocators.FILLINGS_BUTTON).click()
